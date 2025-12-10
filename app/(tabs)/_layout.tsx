@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { CircleDollarSign, House, User, ShoppingBag } from "lucide-react-native";
+import { House, User, ShoppingBag, Trophy } from "lucide-react-native";
 import React from "react";
 import { Platform, View } from 'react-native';
 import { BlurView } from 'expo-blur';
@@ -34,6 +34,13 @@ export default function TabLayout() {
         options={{
           title: "Lobby",
           tabBarIcon: ({ color }) => <House color={color} size={24} />,
+        }}
+      />
+      <Tabs.Screen
+        name="achievements"
+        options={{
+          title: "Awards",
+          tabBarIcon: ({ color }) => <Trophy color={color} size={24} />,
         }}
       />
       <Tabs.Screen

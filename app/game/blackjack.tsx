@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 
 export default function BlackjackScreen() {
   const router = useRouter();
-  const { user, removeChips, addChips, addXp } = useUser();
+  const { user, removeChips, addChips, addXp, updateStats } = useUser();
   const game = useBlackjack();
   const [selectedBet, setSelectedBet] = useState(100);
 
@@ -22,22 +22,37 @@ export default function BlackjackScreen() {
     if (game.gameState === 'gameOver' && game.result) {
       let winAmount = 0;
       
+      const stats = {
+        gamesPlayed: 1,
+        gamesWon: 0,
+        blackjacks: 0,
+        totalChipsWon: 0,
+      };
+      
       if (game.result === 'blackjack') {
         winAmount = Math.floor(game.currentBet * 2.5);
-        addChips(winAmount); // Return bet + 1.5x
+        addChips(winAmount); 
         addXp(100);
+        stats.gamesWon = 1;
+        stats.blackjacks = 1;
+        stats.totalChipsWon = winAmount;
       } else if (game.result === 'win') {
         winAmount = game.currentBet * 2;
-        addChips(winAmount); // Return bet + 1x
+        addChips(winAmount); 
         addXp(50);
+        stats.gamesWon = 1;
+        stats.totalChipsWon = winAmount;
       } else if (game.result === 'push') {
         winAmount = game.currentBet;
-        addChips(winAmount); // Return bet
+        addChips(winAmount); 
       } else {
-        addXp(10); // Participation XP
+        addXp(10); 
       }
+      
+      // Update persistent stats and check achievements
+      updateStats(stats);
     }
-  }, [game.gameState, game.result, addChips, addXp, game.currentBet]);
+  }, [game.gameState, game.result, game.currentBet]);
 
   const handlePlaceBet = () => {
     if (selectedBet > user.chips) {

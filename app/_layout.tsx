@@ -6,8 +6,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { UserProvider } from '@/context/UserContext';
 import { StatusBar } from 'expo-status-bar';
 import Colors from '@/constants/colors';
+import { AchievementNotification } from "@/components/ui/AchievementNotification";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
@@ -20,16 +20,14 @@ function RootLayoutNav() {
         contentStyle: { backgroundColor: Colors.background }
       }}>
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen 
-          name="game/blackjack" 
-          options={{ 
-            gestureEnabled: false,
-            presentation: 'fullScreenModal',
-            animation: 'fade'
-          }} 
-        />
+        <Stack.Screen name="game/blackjack" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+        <Stack.Screen name="game/poker" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+        <Stack.Screen name="game/roulette" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+        <Stack.Screen name="game/baccarat" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+        <Stack.Screen name="game/slots" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
+      <AchievementNotification />
       <StatusBar style="light" />
     </UserProvider>
   );

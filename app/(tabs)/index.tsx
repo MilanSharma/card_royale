@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ScreenContainer } from '@/components/ui/ScreenContainer';
 import { ThemedText } from '@/components/ui/ThemedText';
@@ -12,8 +12,8 @@ export default function LobbyScreen() {
   const router = useRouter();
   const { user } = useUser();
 
-  const handlePlayBlackjack = () => {
-    router.push('/game/blackjack');
+  const handlePlay = (game: string) => {
+    router.push(`/game/${game}` as any);
   };
 
   return (
@@ -32,7 +32,7 @@ export default function LobbyScreen() {
         {/* Featured Game */}
         <ThemedText variant="h3" weight="bold" style={styles.sectionTitle}>Featured</ThemedText>
         
-        <TouchableOpacity activeOpacity={0.9} onPress={handlePlayBlackjack}>
+        <TouchableOpacity activeOpacity={0.9} onPress={() => handlePlay('blackjack')}>
           <LinearGradient
             colors={Colors.goldGradient as any}
             style={styles.featuredCard}
@@ -50,7 +50,6 @@ export default function LobbyScreen() {
               </View>
             </View>
             
-            {/* Decorative Card Art Overlay */}
             <View style={styles.cardArt}>
                <ThemedText style={{ fontSize: 80 }}>♠️</ThemedText>
             </View>
@@ -61,10 +60,10 @@ export default function LobbyScreen() {
         <ThemedText variant="h3" weight="bold" style={styles.sectionTitle}>All Games</ThemedText>
         
         <View style={styles.grid}>
-          <GameCard title="Poker" locked />
-          <GameCard title="Roulette" locked />
-          <GameCard title="Baccarat" locked />
-          <GameCard title="Slots" locked />
+          <GameCard title="Poker" onPress={() => handlePlay('poker')} />
+          <GameCard title="Roulette" onPress={() => handlePlay('roulette')} />
+          <GameCard title="Baccarat" onPress={() => handlePlay('baccarat')} />
+          <GameCard title="Slots" onPress={() => handlePlay('slots')} />
         </View>
 
       </ScrollView>
@@ -72,9 +71,9 @@ export default function LobbyScreen() {
   );
 }
 
-function GameCard({ title, locked }: { title: string, locked?: boolean }) {
+function GameCard({ title, locked, onPress }: { title: string, locked?: boolean, onPress?: () => void }) {
   return (
-    <View style={styles.gameCard}>
+    <TouchableOpacity style={styles.gameCard} activeOpacity={0.8} onPress={onPress} disabled={locked}>
       <LinearGradient
         colors={[Colors.surface, Colors.surfaceLight] as any}
         style={styles.gameCardGradient}
@@ -85,7 +84,7 @@ function GameCard({ title, locked }: { title: string, locked?: boolean }) {
         <ThemedText weight="bold" style={{ marginTop: 12 }} color={locked ? Colors.textDim : Colors.text}>{title}</ThemedText>
         {locked && <ThemedText variant="caption" style={{ marginTop: 4 }}>Coming Soon</ThemedText>}
       </LinearGradient>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -140,7 +139,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   gameCard: {
-    width: '47%', // roughly half minus gap
+    width: '47%', 
     aspectRatio: 1,
     borderRadius: 16,
     overflow: 'hidden',
